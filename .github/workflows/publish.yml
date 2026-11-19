@@ -1,0 +1,71 @@
+name: Publish Changed Packages to NPM
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 1
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  registry-url: "https://registry.npmjs.org/" # ✅ Changed to official npm registry
+                  scope: "@privatetools" # ✅ Changed to your npm org scope
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 12.4.2
+
+            - name: Install Dependencies
+              run: pnpm install
+
+            - name: Check Registry and Publish to NPM
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # ✅ Uses your NPM secret
+              run: |
+                  echo "🔍 Scanning repository for packages to publish to npm..."
+
+                  # Find package.json files strictly in the packages directory
+                  find ./packages -type f -name "package.json" | while read -r pkg; do
+                    
+                    pkg_name=$(node -p "require('./$pkg').name")
+                    current_version=$(node -p "require('./$pkg').version")
+                    
+                    echo "---------------------------------------------------"
+                    echo "📦 Checking npm registry for: $pkg_name @ $current_version"
+                    
+                    # Query the official npm registry to see if this version exists
+                    if pnpm view "$pkg_name@$current_version" version > /dev/null 2>&1; then
+                      echo "   ⏭️ Version $current_version already exists on npm. Skipping."
+                    else
+                      echo "   ✅ Version $current_version not found on npm! Building and publishing..."
+                      
+                      # Build the specific package
+                      if pnpm --filter "$pkg_name" build; then
+                        echo "   📤 Publishing $pkg_name to npm..."
+                        # --access public is REQUIRED for scoped packages (@privatetools/...) on npm
+                        if pnpm --filter "$pkg_name" publish --access public --no-git-checks; then
+                          echo "   🎉 Published $pkg_name@$current_version successfully!"
+                        else
+                          echo "   ❌ Publish command failed for $pkg_name."
+                        fi
+                      else
+                        echo "   ❌ Build failed for $pkg_name!"
+                      fi
+                    fi
+                  done
+                  echo "---------------------------------------------------"
+                  echo "✅ Package publishing check complete."
