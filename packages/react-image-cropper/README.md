@@ -13,9 +13,20 @@ A privacy-first, lightweight, and fully typed image cropper for React. Built for
 **Try it live on our website:** [Open the Universal Image Cropper](https://privatetools.in/tools/image/universal-image-cropper)  
 _(100% free, no login required, runs entirely in your browser using this exact package)._
 
-### 🎥 See it in action
+### 🎞️ Demo (GIF — auto-plays)
 
-![Cropper Demo GIF](PLACEHOLDER_FOR_YOUR_GITHUB_GIF_URL)
+<img src="./assets/privatetools-image-cropper.gif" width="800" height="450" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 100%;" />
+
+### 🎥 Demo (Video — with controls)
+
+<video width="800" height="450" controls style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 100%;">
+  <source src="./assets/privatetools-image-cropper.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+[📥 Watch full HD MP4](./assets/privatetools-image-cropper.mp4)
+
+> **Note:** The video quality may appear low or experience slight stuttering due to the screen recording software used during capture. The actual package performance in your browser is smooth, fast, and highly optimized.
 
 ## 🚀 Installation
 
