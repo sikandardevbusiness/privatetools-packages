@@ -1,0 +1,23 @@
+{
+    "name": "privatetools-packages",
+    "version": "1.0.0",
+    "private": true,
+    "packageManager": "pnpm@12.4.2",
+    "scripts": {
+        "dev": "turbo run dev",
+        "lint": "turbo run lint",
+        "test": "turbo run test",
+        "build": "turbo run build",
+        "format": "prettier --write .",
+        "check-types": "turbo run check-types"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "devDependencies": {
+        "eslint": "^9.39.5",
+        "prettier": "^3.9.5",
+        "turbo": "^2.11.11",
+        "typescript": "^6.0.3"
+    }
+}
